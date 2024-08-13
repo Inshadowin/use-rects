@@ -7,7 +7,7 @@ type UseContainerSizeParams = {
 };
 
 export const useContainerSize = ({
-  delay = 50,
+  delay = 20,
   containerRef: providedRef,
 }: UseContainerSizeParams = {}) => {
   const localContainerRef = useRef<any>(null);

@@ -39,15 +39,15 @@ export const useElementPosition = (
           });
         }
       });
-    });
+    }, 20);
 
     updatePosition();
 
-    const contianer = mainContainerId
+    const container = mainContainerId
       ? document.getElementById(mainContainerId)
       : null;
-    const o1bserver = new MutationObserver(updatePosition);
-    o1bserver.observe(document.body, {
+    const observer = new MutationObserver(updatePosition);
+    observer.observe(document.body, {
       attributes: true,
       childList: true,
       subtree: true,
@@ -56,17 +56,17 @@ export const useElementPosition = (
     window.addEventListener('wheel', updatePosition);
     window.addEventListener('resize', updatePosition);
     window.addEventListener('scroll', updatePosition);
-    contianer?.addEventListener('scroll', updatePosition);
+    container?.addEventListener('scroll', updatePosition);
 
     return () => {
-      o1bserver.disconnect();
+      observer.disconnect();
 
       window.removeEventListener('wheel', updatePosition);
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition);
-      contianer?.removeEventListener('scroll', updatePosition);
+      container?.removeEventListener('scroll', updatePosition);
     };
-  }, []);
+  }, [mainContainerId]);
 
   return [ref, useDeepMemo(() => position, [position])];
 };
