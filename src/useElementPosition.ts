@@ -10,10 +10,9 @@ type Position = {
   height: number;
 };
 
-export const useElementPosition = (): [
-  MutableRefObject<HTMLDivElement | null>,
-  Position
-] => {
+export const useElementPosition = (
+  mainContainerId?: string
+): [MutableRefObject<HTMLDivElement | null>, Position] => {
   const [position, setPosition] = useState<Position>({
     top: 0,
     left: 0,
@@ -42,7 +41,9 @@ export const useElementPosition = (): [
 
     updatePosition();
 
-    const contianer = document.getElementById('main-container');
+    const contianer = mainContainerId
+      ? document.getElementById(mainContainerId)
+      : null;
     const o1bserver = new MutationObserver(updatePosition);
     o1bserver.observe(document.body, {
       attributes: true,
