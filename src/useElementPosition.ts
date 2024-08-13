@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useTransition } from 'react';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 import type { MutableRefObject } from 'react';
 
 type Position = {

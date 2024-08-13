@@ -1,5 +1,5 @@
 import { useRef, useState, useLayoutEffect, useMemo } from 'react';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 
 type UseContainerSizeParams = {
   delay?: number;
