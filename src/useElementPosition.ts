@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import type { MutableRefObject } from 'react';
 
 import { useDeepMemo } from './useDeepMemo';
+import type { Params } from './types';
 
 type Position = {
   top: number;
@@ -12,9 +13,10 @@ type Position = {
   height: number;
 };
 
-export const useElementPosition = (
-  mainContainerId?: string
-): [MutableRefObject<HTMLDivElement | null>, Position] => {
+export const useElementPosition = ({
+  delay = 20,
+  mainContainerId,
+}: Params = {}): [MutableRefObject<HTMLDivElement | null>, Position] => {
   const [position, setPosition] = useState<Position>({
     top: 0,
     left: 0,
@@ -39,7 +41,7 @@ export const useElementPosition = (
           });
         }
       });
-    }, 20);
+    }, delay);
 
     updatePosition();
 
@@ -66,7 +68,7 @@ export const useElementPosition = (
       window.removeEventListener('scroll', updatePosition);
       container?.removeEventListener('scroll', updatePosition);
     };
-  }, [mainContainerId]);
+  }, [delay, mainContainerId]);
 
   return [ref, useDeepMemo(() => position, [position])];
 };
