@@ -24,14 +24,9 @@
   "homepage": "https://github.com/Inshadowin/use-rects#readme",
   "keywords": [
     "react",
-    "use-breakpoint",
-    "use-breakpoints",
-    "breakpoints",
-    "md",
-    "lg",
-    "xl",
-    "2xl",
-    "responsive"
+    "dropdown",
+    "positions",
+    "element size"
   ],
   "jest": {
     "roots": [
