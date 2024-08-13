@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useTransition } from 'react';
 import { debounce } from 'lodash';
 import type { MutableRefObject } from 'react';
 
+import { useDeepMemo } from './useDeepMemo';
+
 type Position = {
   top: number;
   left: number;
@@ -66,7 +68,7 @@ export const useElementPosition = (
     };
   }, []);
 
-  return [ref, position];
+  return [ref, useDeepMemo(() => position, [position])];
 };
 
 export default useElementPosition;
