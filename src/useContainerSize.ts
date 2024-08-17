@@ -1,13 +1,16 @@
 import { useRef, useState, useLayoutEffect, useMemo } from 'react';
-import { debounce } from 'lodash';
+
+import { withDelay } from './withDelay';
 
 type UseContainerSizeParams = {
   delay?: number;
+  enable?: boolean;
   containerRef?: React.MutableRefObject<any>;
 };
 
 export const useContainerSize = ({
   delay = 20,
+  enable = true,
   containerRef: providedRef,
 }: UseContainerSizeParams = {}) => {
   const localContainerRef = useRef<any>(null);
@@ -17,7 +20,7 @@ export const useContainerSize = ({
   const [height, setHeight] = useState<number | null>(null);
 
   useLayoutEffect(() => {
-    if (!window?.ResizeObserver) return;
+    if (!window?.ResizeObserver || !enable) return;
 
     const container = containerRef.current;
 
@@ -26,16 +29,13 @@ export const useContainerSize = ({
       container && setHeight(container.offsetHeight);
     };
 
-    const observer = new ResizeObserver(
-      debounce(handleResize, delay, { leading: true })
-    );
-
+    const observer = new ResizeObserver(withDelay(handleResize, delay));
     container && observer.observe(container);
 
     return () => {
       container && observer.unobserve(container);
     };
-  }, [delay, containerRef]);
+  }, [enable, delay, containerRef]);
 
   const result = useMemo(() => {
     return { containerRef, height, width };

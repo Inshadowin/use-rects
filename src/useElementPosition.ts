@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef, useTransition } from 'react';
-import { debounce } from 'lodash';
-import type { MutableRefObject } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 
+import { withDelay } from './withDelay';
 import { useDeepMemo } from './useDeepMemo';
+import { useContainer } from './useContainer';
 import type { Params } from './types';
 
 type Position = {
@@ -16,20 +16,20 @@ type Position = {
 export const useElementPosition = ({
   delay = 20,
   mainContainerId,
-}: Params = {}): [MutableRefObject<HTMLDivElement | null>, Position] => {
+}: Params = {}): [(node: HTMLDivElement) => void, Position] => {
   const [position, setPosition] = useState<Position>({
     top: 0,
     left: 0,
     width: 0,
     height: 0,
   });
-  const ref = useRef<HTMLDivElement | null>(null);
+  const { containerRef, ref } = useContainer();
   const [, startTransition] = useTransition();
 
   useEffect(() => {
-    const updatePosition = debounce(() => {
+    const updatePosition = withDelay(() => {
       startTransition(() => {
-        const entry = ref.current;
+        const entry = containerRef.current;
 
         if (entry) {
           const rect = entry.getBoundingClientRect();

@@ -1,15 +1,17 @@
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 
+import { useContainer } from './useContainer';
 import { useContainerSize } from './useContainerSize';
 import { useElementPosition } from './useElementPosition';
 import type { Params } from './types';
 
 export const usePopupPosition = ({ delay, ...params }: Params = {}) => {
-  const popupRef = useRef<HTMLDivElement | null>(null);
+  const { containerRef: popupContainer, ref: popupRef } = useContainer();
   const [anchorRef, anchorPosition] = useElementPosition({ delay, ...params });
   const popupRect = useContainerSize({
-    containerRef: popupRef,
     delay: delay,
+    containerRef: popupContainer,
+    enable: !!popupContainer.current,
   });
 
   const position = useMemo<typeof anchorPosition | null>(() => {
