@@ -10,10 +10,10 @@ const Dropdown = () => {
   return (
     <div style={{ position: 'relative' }}>
       <input
+        readOnly
         ref={anchorRef}
         onClick={() => setOpen(true)}
         value="test me"
-        readOnly
       />
       {!!open && (
         <div
