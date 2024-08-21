@@ -4,9 +4,12 @@ import { getStrategies } from './strategies';
 import { useContainer } from './useContainer';
 import { useContainerSize } from './useContainerSize';
 import { useElementPosition } from './useElementPosition';
-import type { Params, ResultPositionType, AlignType, SizeType } from './types';
+import type { Params, ResultPositionType, AlignType } from './types';
 
-type PopupStyle = SizeType & ResultPositionType;
+type PopupStyle = ResultPositionType & {
+  position: 'fixed';
+  additionalStyle: { minWidth: number };
+};
 
 type UsePopupPositionParams = Params & {
   align?: AlignType;
@@ -35,11 +38,11 @@ export const usePopupPosition = ({
     const [vertical, horizontal] = getStrategies(align);
 
     return {
+      position: 'fixed',
       ...vertical(anchorPosition, popupRect, flip),
       ...horizontal(anchorPosition, popupRect, flip),
 
-      width: popupRect.width,
-      height: popupRect.height,
+      additionalStyle: { minWidth: anchorPosition.width },
     };
   }, [popupRect, anchorPosition, align, flip]);
 
