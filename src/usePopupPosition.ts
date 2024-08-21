@@ -15,7 +15,7 @@ type PopupStyle = {
   height: number;
 };
 
-type AlignType = 'left_top' | 'left_bottom' | 'right_bottom' | 'right_top';
+type AlignType = 'topleft' | 'bottomleft' | 'bottomright' | 'topright';
 
 type UsePopupPositionParams = Params & {
   align?: AlignType;
@@ -25,7 +25,7 @@ type UsePopupPositionParams = Params & {
 export const usePopupPosition = ({
   delay,
   flip = true,
-  align = 'left_bottom',
+  align = 'topleft',
   ...params
 }: UsePopupPositionParams = {}) => {
   const { containerRef: popupContainer, ref: popupRef } = useContainer();
