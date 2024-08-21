@@ -3,15 +3,13 @@ import { useState, useEffect, useTransition } from 'react';
 import { withDelay } from './withDelay';
 import { useDeepMemo } from './useDeepMemo';
 import { useContainer } from './useContainer';
-import type { Params, PositionType, SizeType } from './types';
-
-type Position = SizeType & Required<PositionType>;
+import type { Params, ElementPositionType } from './types';
 
 export const useElementPosition = ({
   delay = 20,
   mainContainerId,
-}: Params = {}): [(node: HTMLDivElement) => void, Position] => {
-  const [position, setPosition] = useState<Position>({
+}: Params = {}): [(node: HTMLDivElement) => void, ElementPositionType] => {
+  const [position, setPosition] = useState<ElementPositionType>({
     top: 0,
     left: 0,
     right: 0,
