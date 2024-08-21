@@ -3,19 +3,9 @@ import { useMemo } from 'react';
 import { useContainer } from './useContainer';
 import { useContainerSize } from './useContainerSize';
 import { useElementPosition } from './useElementPosition';
-import type { Params } from './types';
+import type { Params, PositionType, AlignType, SizeType } from './types';
 
-type PopupStyle = {
-  top?: number;
-  left?: number;
-  right?: number;
-  bottom?: number;
-
-  width: number;
-  height: number;
-};
-
-type AlignType = 'topleft' | 'bottomleft' | 'bottomright' | 'topright';
+type PopupStyle = SizeType & PositionType;
 
 type UsePopupPositionParams = Params & {
   align?: AlignType;

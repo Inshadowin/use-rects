@@ -1,6 +1,7 @@
 import { useRef, useState, useLayoutEffect, useMemo } from 'react';
 
 import { withDelay } from './withDelay';
+import type { SizeType } from './types';
 
 type UseContainerSizeParams = {
   delay?: number;
@@ -8,11 +9,15 @@ type UseContainerSizeParams = {
   containerRef?: React.MutableRefObject<any>;
 };
 
+type ResultType = SizeType & {
+  containerRef: React.MutableRefObject<any>;
+};
+
 export const useContainerSize = ({
   delay = 20,
   enable = true,
   containerRef: providedRef,
-}: UseContainerSizeParams = {}) => {
+}: UseContainerSizeParams = {}): ResultType => {
   const localContainerRef = useRef<any>(null);
   const containerRef = providedRef ?? localContainerRef;
 

@@ -3,17 +3,9 @@ import { useState, useEffect, useTransition } from 'react';
 import { withDelay } from './withDelay';
 import { useDeepMemo } from './useDeepMemo';
 import { useContainer } from './useContainer';
-import type { Params } from './types';
+import type { Params, PositionType, SizeType } from './types';
 
-type Position = {
-  top: number;
-  left: number;
-  right: number;
-  bottom: number;
-
-  width: number;
-  height: number;
-};
+type Position = SizeType & Required<PositionType>;
 
 export const useElementPosition = ({
   delay = 20,
