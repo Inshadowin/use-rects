@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { getStrategies } from './strategies';
 import { useContainer } from './useContainer';
 import { useContainerSize } from './useContainerSize';
 import { useElementPosition } from './useElementPosition';
@@ -15,7 +16,7 @@ type UsePopupPositionParams = Params & {
 export const usePopupPosition = ({
   delay,
   flip = true,
-  align = 'topleft',
+  align = 'bottomleft',
   ...params
 }: UsePopupPositionParams = {}) => {
   const { containerRef: popupContainer, ref: popupRef } = useContainer();
@@ -31,18 +32,16 @@ export const usePopupPosition = ({
       return null;
     }
 
-    const left =
-      anchorPosition.left + popupRect.width > window.innerWidth
-        ? window.innerWidth - popupRect.width - 1
-        : anchorPosition.left;
+    const [vertical, horizontal] = getStrategies(align);
 
-    const top =
-      anchorPosition.top + popupRect.height > window.innerHeight
-        ? anchorPosition.top - popupRect.height
-        : anchorPosition.top + anchorPosition.height;
+    return {
+      ...vertical(anchorPosition, popupRect, flip),
+      ...horizontal(anchorPosition, popupRect, flip),
 
-    return { left, top, width: popupRect.width, height: popupRect.height };
-  }, [popupRect, anchorPosition]);
+      width: popupRect.width,
+      height: popupRect.height,
+    };
+  }, [popupRect, anchorPosition, align, flip]);
 
   return {
     popupRef,

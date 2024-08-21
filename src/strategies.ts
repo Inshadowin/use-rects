@@ -1,51 +1,64 @@
 import type {
   SizeType,
+  AlignType,
   AlignStrategy,
-  ElementPositionType,
   ResultPositionType,
+  ElementPositionType,
 } from './types';
 
 type StrategyType = (
-  anchorPostion: ElementPositionType,
-  size: SizeType
+  anchorPosition: ElementPositionType,
+  size: SizeType,
+  flip: boolean
 ) => ResultPositionType;
 
-type AllowType = (
-  anchorPostion: ElementPositionType,
-  size: SizeType
-) => boolean;
-
 export const strategies: { [x in AlignStrategy]: StrategyType } = {
-  top: (anchorPostion, _size) => {
-    return { top: anchorPostion.top };
+  top: (anchorPosition, size, flip) => {
+    if (flip && anchorPosition.top - size.height <= 0) {
+      return { bottom: anchorPosition.bottom };
+    }
+
+    return { top: anchorPosition.top };
   },
 
-  left: (anchorPostion, _size) => {
-    return { left: anchorPostion.left };
+  left: (anchorPosition, size, flip) => {
+    if (flip && anchorPosition.right + size.width >= window.innerWidth) {
+      return { right: anchorPosition.right };
+    }
+
+    return { left: anchorPosition.left };
   },
 
-  right: (anchorPostion, size) => {
-    return { right: anchorPostion.left + size.width };
+  right: (anchorPosition, size, flip) => {
+    if (flip && anchorPosition.left + size.width <= 0) {
+      return { left: anchorPosition.left };
+    }
+
+    return { right: anchorPosition.right };
   },
 
-  bottom: (anchorPostion, _size) => {
-    return { top: anchorPostion.bottom };
+  bottom: (anchorPosition, size, flip) => {
+    if (flip && anchorPosition.bottom + size.height >= window.innerHeight) {
+      return { top: anchorPosition.top };
+    }
+
+    return { bottom: anchorPosition.bottom };
   },
 };
-export const allowed: { [x in AlignStrategy]: AllowType } = {
-  top: (anchorPostion, size) => {
-    return true;
-  },
 
-  left: (anchorPostion, size) => {
-    return true;
-  },
-
-  right: (anchorPostion, size) => {
-    return true;
-  },
-
-  bottom: (anchorPostion, size) => {
-    return true;
-  },
+export const getStrategies = (
+  align: AlignType
+): [StrategyType, StrategyType] => {
+  switch (align) {
+    case 'bottomleft':
+      return [strategies.bottom, strategies.left];
+    case 'bottomright':
+      return [strategies.bottom, strategies.right];
+    case 'topleft':
+      return [strategies.top, strategies.left];
+    case 'topright':
+      return [strategies.top, strategies.right];
+    default:
+      return [strategies.bottom, strategies.left];
+  }
 };
