@@ -18,7 +18,7 @@ export const strategies: { [x in AlignStrategy]: StrategyType } = {
       return strategies.bottom(anchorPosition, size, false);
     }
 
-    return { top: anchorPosition.top };
+    return { top: anchorPosition.top - size.height };
   },
 
   left: (anchorPosition, size, flip) => {
