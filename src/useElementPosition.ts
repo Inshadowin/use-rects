@@ -8,6 +8,8 @@ import type { Params } from './types';
 type Position = {
   top: number;
   left: number;
+  right: number;
+  bottom: number;
 
   width: number;
   height: number;
@@ -20,6 +22,9 @@ export const useElementPosition = ({
   const [position, setPosition] = useState<Position>({
     top: 0,
     left: 0,
+    right: 0,
+    bottom: 0,
+
     width: 0,
     height: 0,
   });
@@ -36,6 +41,9 @@ export const useElementPosition = ({
           setPosition({
             top: rect.top,
             left: rect.left,
+            right: rect.right,
+            bottom: rect.bottom,
+
             width: rect.width,
             height: rect.height,
           });
