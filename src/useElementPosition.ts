@@ -18,6 +18,9 @@ export const useElementPosition = ({
 
     width: 0,
     height: 0,
+
+    marginRight: 0,
+    marginBottom: 0,
   });
   const { containerRef, ref } = useContainer();
   const [, startTransition] = useTransition();
@@ -29,6 +32,7 @@ export const useElementPosition = ({
 
         if (entry) {
           const rect = entry.getBoundingClientRect();
+
           setPosition({
             top: rect.top,
             left: rect.left,
@@ -37,6 +41,9 @@ export const useElementPosition = ({
 
             width: rect.width,
             height: rect.height,
+
+            marginRight: window.innerWidth - rect.right,
+            marginBottom: window.innerHeight - rect.bottom,
           });
         }
       });

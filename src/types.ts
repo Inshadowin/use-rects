@@ -10,7 +10,10 @@ export type ResultPositionType = {
   right?: number;
   bottom?: number;
 };
-export type ElementPositionType = SizeType & Required<ResultPositionType>;
+export type FixedPositionType = { marginRight: number; marginBottom: number };
+export type ElementPositionType = SizeType &
+  Required<ResultPositionType> &
+  FixedPositionType;
 
 export type AlignStrategy = 'left' | 'right' | 'top' | 'bottom';
 export type AlignType = 'topleft' | 'bottomleft' | 'bottomright' | 'topright';
