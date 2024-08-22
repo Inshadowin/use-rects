@@ -5,8 +5,8 @@ export const useContainer = () => {
   const [container, setContainer] = useState<HTMLDivElement>(null);
 
   const ref = useCallback((node: HTMLDivElement) => {
-    setContainer(node);
     containerRef.current = node;
+    setContainer(node);
   }, []);
 
   return { containerRef, container, ref };

@@ -22,12 +22,17 @@ export const usePopupPosition = ({
   align = 'bottomleft',
   ...params
 }: UsePopupPositionParams = {}) => {
-  const { containerRef: popupContainer, ref: popupRef } = useContainer();
+  const {
+    ref: popupRef,
+    container: popup,
+    containerRef: popupContainerRef,
+  } = useContainer();
+
   const [anchorRef, anchorPosition] = useElementPosition({ delay, ...params });
   const popupRect = useContainerSize({
     delay: delay,
-    containerRef: popupContainer,
-    enable: !!popupContainer.current,
+    enable: !!popup,
+    containerRef: popupContainerRef,
   });
 
   const position = useMemo<PopupStyle | null>(() => {
