@@ -42,6 +42,8 @@ export const useElementPosition = ({
         const isObstructed =
           (obstruction && !entry.contains(obstruction)) ||
           rect.top < 0 ||
+          rect.left < 0 ||
+          rect.right > window.innerWidth ||
           rect.bottom > window.innerHeight;
 
         setPosition({
