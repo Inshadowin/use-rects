@@ -9,6 +9,7 @@ import type { Params, ResultPositionType, AlignType } from './types';
 type PopupStyle = ResultPositionType & {
   opacity?: 1 | 0;
   position?: 'fixed';
+  display?: 'none' | undefined;
   additionalStyle?: { minWidth: number };
 };
 
@@ -37,7 +38,10 @@ export const usePopupPosition = ({
   });
 
   const position = useMemo<PopupStyle | null>(() => {
-    if (!popupRect?.height || !popupRect.width || !anchorPosition.isVisible) {
+    if (!anchorPosition.isVisible) {
+      return { display: 'none' };
+    }
+    if (!popupRect?.height || !popupRect.width) {
       return { opacity: 0 };
     }
 
