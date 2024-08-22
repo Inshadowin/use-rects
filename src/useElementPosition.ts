@@ -7,7 +7,7 @@ import { useContainer } from './useContainer';
 import type { Params, ElementPositionType } from './types';
 
 export const useElementPosition = ({
-  delay = 20,
+  delay = 15,
   mainContainerId,
 }: Params = {}): [(node: HTMLDivElement) => void, ElementPositionType] => {
   const [position, setPosition] = useState<ElementPositionType>({
@@ -21,6 +21,7 @@ export const useElementPosition = ({
 
     marginRight: 0,
     marginBottom: 0,
+    isVisible: false,
   });
   const { containerRef, container, ref } = useContainer();
   const [, startTransition] = useTransition();
@@ -34,6 +35,11 @@ export const useElementPosition = ({
 
       if (entry) {
         const rect = entry.getBoundingClientRect();
+        const obstruction = document.elementFromPoint(
+          (rect.left + rect.right) / 2,
+          (rect.top + rect.bottom) / 2
+        );
+        const isObstructed = obstruction && !entry.contains(obstruction);
 
         setPosition({
           top: rect.top,
@@ -44,6 +50,7 @@ export const useElementPosition = ({
           width: rect.width,
           height: rect.height,
 
+          isVisible: !isObstructed,
           marginRight: window.innerWidth - rect.right,
           marginBottom: window.innerHeight - rect.bottom,
         });

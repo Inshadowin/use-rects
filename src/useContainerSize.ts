@@ -14,7 +14,7 @@ type ResultType = SizeType & {
 };
 
 export const useContainerSize = ({
-  delay = 20,
+  delay = 15,
   enable = true,
   containerRef: providedRef,
 }: UseContainerSizeParams = {}): ResultType => {

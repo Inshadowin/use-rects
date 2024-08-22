@@ -13,7 +13,9 @@ export type ResultPositionType = {
 export type FixedPositionType = { marginRight: number; marginBottom: number };
 export type ElementPositionType = SizeType &
   Required<ResultPositionType> &
-  FixedPositionType;
+  FixedPositionType & {
+    isVisible: boolean;
+  };
 
 export type AlignStrategy = 'left' | 'right' | 'top' | 'bottom';
 export type AlignType = 'topleft' | 'bottomleft' | 'bottomright' | 'topright';

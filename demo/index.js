@@ -5,7 +5,11 @@ import { usePopupPosition } from '../src';
 
 const Dropdown = ({ style = {}, align }) => {
   const [open, setOpen] = useState(false);
-  const { popupRef, anchorRef, position } = usePopupPosition({ align });
+  const { popupRef, anchorRef, position } = usePopupPosition({
+    align,
+    delay: 5,
+    mainContainerId: 'container-scroll',
+  });
 
   return (
     <div style={{ position: 'relative', ...style }}>
@@ -38,21 +42,34 @@ const Demo = () => {
   return (
     <div
       style={{
-        height: '3000px',
-        overflowY: 'auto',
-        paddingTop: '400px',
-        position: 'relative',
+        height: '100vh',
+        overflow: 'hidden',
       }}
     >
-      <Dropdown />
-      <Dropdown
-        style={{ position: 'absolute', left: 0, top: 0 }}
-        align="topleft"
-      />
-      <Dropdown
-        style={{ position: 'absolute', right: 0, top: 0 }}
-        align="topleft"
-      />
+      <div style={{ height: 200, border: '1px solid blue' }}>HEADER</div>
+      <div
+        id="container-scroll"
+        style={{ height: 'calc(100vh - 216px)', overflowY: 'auto' }}
+      >
+        <div
+          style={{
+            height: '3000px',
+
+            paddingTop: '400px',
+            position: 'relative',
+          }}
+        >
+          <Dropdown />
+          <Dropdown
+            style={{ position: 'absolute', left: 0, top: 0 }}
+            align="topleft"
+          />
+          <Dropdown
+            style={{ position: 'absolute', right: 0, top: 0 }}
+            align="topleft"
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -37,7 +37,7 @@ export const usePopupPosition = ({
   });
 
   const position = useMemo<PopupStyle | null>(() => {
-    if (!popupRect?.height || !popupRect.width) {
+    if (!popupRect?.height || !popupRect.width || !anchorPosition.isVisible) {
       return { opacity: 0 };
     }
 
