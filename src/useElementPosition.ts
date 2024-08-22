@@ -1,4 +1,4 @@
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useTransition, useLayoutEffect } from 'react';
 
 import { withDelay } from './withDelay';
 import { useDeepMemo } from './useDeepMemo';
@@ -22,34 +22,38 @@ export const useElementPosition = ({
     marginRight: 0,
     marginBottom: 0,
   });
-  const { containerRef, ref } = useContainer();
+  const { containerRef, container, ref } = useContainer();
   const [, startTransition] = useTransition();
 
-  useEffect(() => {
+  const containerExists = !!container;
+  useLayoutEffect(() => {
+    if (!containerExists) return;
+
+    const performUpdate = () => {
+      const entry = containerRef.current;
+
+      if (entry) {
+        const rect = entry.getBoundingClientRect();
+
+        setPosition({
+          top: rect.top,
+          left: rect.left,
+          right: rect.right,
+          bottom: rect.bottom,
+
+          width: rect.width,
+          height: rect.height,
+
+          marginRight: window.innerWidth - rect.right,
+          marginBottom: window.innerHeight - rect.bottom,
+        });
+      }
+    };
+    performUpdate();
+
     const updatePosition = withDelay(() => {
-      startTransition(() => {
-        const entry = containerRef.current;
-
-        if (entry) {
-          const rect = entry.getBoundingClientRect();
-
-          setPosition({
-            top: rect.top,
-            left: rect.left,
-            right: rect.right,
-            bottom: rect.bottom,
-
-            width: rect.width,
-            height: rect.height,
-
-            marginRight: window.innerWidth - rect.right,
-            marginBottom: window.innerHeight - rect.bottom,
-          });
-        }
-      });
+      startTransition(performUpdate);
     }, delay);
-
-    updatePosition();
 
     const container = mainContainerId
       ? document.getElementById(mainContainerId)
@@ -74,7 +78,7 @@ export const useElementPosition = ({
       window.removeEventListener('scroll', updatePosition);
       container?.removeEventListener('scroll', updatePosition);
     };
-  }, [delay, mainContainerId]);
+  }, [delay, mainContainerId, containerExists]);
 
   return [ref, useDeepMemo(() => position, [position])];
 };
