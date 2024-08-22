@@ -7,8 +7,9 @@ import { useElementPosition } from './useElementPosition';
 import type { Params, ResultPositionType, AlignType } from './types';
 
 type PopupStyle = ResultPositionType & {
-  position: 'fixed';
-  additionalStyle: { minWidth: number };
+  opacity?: 1 | 0;
+  position?: 'fixed';
+  additionalStyle?: { minWidth: number };
 };
 
 type UsePopupPositionParams = Params & {
@@ -37,12 +38,13 @@ export const usePopupPosition = ({
 
   const position = useMemo<PopupStyle | null>(() => {
     if (!popupRect?.height || !popupRect.width) {
-      return null;
+      return { opacity: 0 };
     }
 
     const [vertical, horizontal] = getStrategies(align);
 
     return {
+      opacity: 1,
       position: 'fixed',
       ...vertical(anchorPosition, popupRect, flip),
       ...horizontal(anchorPosition, popupRect, flip),

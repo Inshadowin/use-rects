@@ -1,6 +1,6 @@
 {
   "name": "use-rects",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "This is a package with dom measurements",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
