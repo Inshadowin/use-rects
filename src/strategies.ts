@@ -32,14 +32,14 @@ const fallbackStrategy: { [x in AlignStrategy]: AlignStrategy } = {
 };
 const canApplyStrategy: { [x in AlignStrategy]: CanApplyStrategyType } = {
   top: (anchor, size) => anchor.top - size.height > 0,
-  right: (anchor, size) => anchor.right - size.width > 0,
   left: (anchor, size) => anchor.left + size.width < window.innerWidth,
+  right: (anchor, size) => anchor.right - size.width > 0,
   bottom: (anchor, size) => anchor.bottom + size.height < window.innerHeight,
 };
 const applyStrategy: { [x in AlignStrategy]: ApplyStrategyType } = {
   top: (anchor, size) => ({ top: anchor.top - size.height }),
-  right: (anchor, size) => ({ left: anchor.right - size.width }),
   left: (anchor, _size) => ({ left: anchor.left }),
+  right: (anchor, size) => ({ left: anchor.right - size.width }),
   bottom: (anchor, _size) => ({ top: anchor.bottom }),
 };
 
