@@ -18,63 +18,55 @@ type CanApplyStrategyType = (
   size: SizeType
 ) => boolean;
 
-const pessimisticStrategyResult: ResultPositionType = { left: 0, top: 0 };
+type ApplyStrategyType = (
+  anchorPosition: ElementPositionType,
+  size: SizeType
+) => ResultPositionType;
 
+const pessimisticStrategyResult: ResultPositionType = { left: 0, top: 0 };
+const fallbackStrategy: { [x in AlignStrategy]: AlignStrategy } = {
+  bottom: 'top',
+  top: 'bottom',
+  left: 'right',
+  right: 'left',
+};
 const canApplyStrategy: { [x in AlignStrategy]: CanApplyStrategyType } = {
   top: (anchor, size) => anchor.top - size.height > 0,
   right: (anchor, size) => anchor.right - size.width > 0,
   left: (anchor, size) => anchor.left + size.width < window.innerWidth,
   bottom: (anchor, size) => anchor.bottom + size.height < window.innerHeight,
 };
+const applyStrategy: { [x in AlignStrategy]: ApplyStrategyType } = {
+  top: (anchor, size) => ({ top: anchor.top - size.height }),
+  right: (anchor, size) => ({ left: anchor.right - size.width }),
+  left: (anchor, _size) => ({ left: anchor.left }),
+  bottom: (anchor, _size) => ({ top: anchor.bottom }),
+};
+
+const executeStrategy = (
+  strategy: AlignStrategy,
+  anchorPosition: ElementPositionType,
+  size: SizeType,
+  flip: boolean,
+  pessimistic: boolean
+) => {
+  if (!flip || canApplyStrategy[strategy](anchorPosition, size)) {
+    return applyStrategy[strategy](anchorPosition, size);
+  }
+
+  const fallback = fallbackStrategy[strategy];
+  if (!pessimistic || canApplyStrategy[fallback](anchorPosition, size)) {
+    return applyStrategy[fallback](anchorPosition, size);
+  }
+
+  return pessimisticStrategyResult;
+};
 
 export const strategies: { [x in AlignStrategy]: StrategyType } = {
-  top: (anchorPosition, size, flip, pessimistic) => {
-    if (!flip || canApplyStrategy.top(anchorPosition, size)) {
-      return { top: anchorPosition.top - size.height };
-    }
-
-    if (!pessimistic || canApplyStrategy.bottom(anchorPosition, size)) {
-      return strategies.bottom(anchorPosition, size, false, false);
-    }
-
-    return pessimisticStrategyResult;
-  },
-
-  left: (anchorPosition, size, flip, pessimistic) => {
-    if (!flip || canApplyStrategy.left(anchorPosition, size)) {
-      return { left: anchorPosition.left };
-    }
-
-    if (!pessimistic || canApplyStrategy.right(anchorPosition, size)) {
-      return strategies.right(anchorPosition, size, false, false);
-    }
-
-    return pessimisticStrategyResult;
-  },
-
-  right: (anchorPosition, size, flip, pessimistic) => {
-    if (!flip || canApplyStrategy.right(anchorPosition, size)) {
-      return { left: anchorPosition.right - size.width };
-    }
-
-    if (!pessimistic || canApplyStrategy.left(anchorPosition, size)) {
-      return strategies.left(anchorPosition, size, false, false);
-    }
-
-    return pessimisticStrategyResult;
-  },
-
-  bottom: (anchorPosition, size, flip, pessimistic) => {
-    if (!flip || canApplyStrategy.bottom(anchorPosition, size)) {
-      return { top: anchorPosition.bottom };
-    }
-
-    if (!pessimistic || canApplyStrategy.top(anchorPosition, size)) {
-      return strategies.top(anchorPosition, size, false, false);
-    }
-
-    return pessimisticStrategyResult;
-  },
+  top: (...params) => executeStrategy('top', ...params),
+  left: (...params) => executeStrategy('left', ...params),
+  right: (...params) => executeStrategy('right', ...params),
+  bottom: (...params) => executeStrategy('bottom', ...params),
 };
 
 export const getStrategies = (
