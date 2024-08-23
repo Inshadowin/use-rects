@@ -16,11 +16,13 @@ type PopupStyle = ResultPositionType & {
 type UsePopupPositionParams = Params & {
   align?: AlignType;
   flip?: boolean;
+  pessimistic?: boolean;
 };
 
 export const usePopupPosition = ({
   delay,
   flip = true,
+  pessimistic = false,
   align = 'bottomleft',
   ...params
 }: UsePopupPositionParams = {}) => {
@@ -50,12 +52,12 @@ export const usePopupPosition = ({
     return {
       opacity: 1,
       position: 'fixed',
-      ...vertical(anchorPosition, popupRect, flip),
-      ...horizontal(anchorPosition, popupRect, flip),
+      ...vertical(anchorPosition, popupRect, flip, pessimistic),
+      ...horizontal(anchorPosition, popupRect, flip, pessimistic),
 
       additionalStyle: { minWidth: anchorPosition.width },
     };
-  }, [popupRect, anchorPosition, align, flip]);
+  }, [popupRect, anchorPosition, align, flip, pessimistic]);
 
   return {
     popupRef,
