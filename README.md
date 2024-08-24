@@ -32,7 +32,6 @@ const Dropdown = () => {
   const [open, setOpen] = useState(false);
   const { popupRef, anchorRef, position } = usePopupPosition({
     delay: 50,
-    mainContainerId: 'main-container-id',
   });
 
   return (
@@ -90,12 +89,7 @@ example:
 ```tsx
 const [ref, position] = useElementPosition({
   delay: 20,
-  mainContainerId: 'main-container-id',
 });
 
 return <div ref={ref} />;
 ```
-
-## mainContainerId
-
-If you have scrollbar different to scrollbar on body - add it's id to these hooks for convenience

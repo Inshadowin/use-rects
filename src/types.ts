@@ -1,16 +1,22 @@
 export type Params = {
   delay?: number;
-  mainContainerId?: string;
 };
 
 export type SizeType = { height: number; width: number };
 export type ResultPositionType = {
   top?: number;
+  bottom?: number;
+
   left?: number;
   right?: number;
-  bottom?: number;
 };
-export type FixedPositionType = { marginRight: number; marginBottom: number };
+export type FixedPositionType = {
+  marginTop: number;
+  marginBottom: number;
+
+  marginLeft: number;
+  marginRight: number;
+};
 export type ElementPositionType = SizeType &
   Required<ResultPositionType> &
   FixedPositionType & {

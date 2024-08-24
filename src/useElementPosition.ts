@@ -6,10 +6,10 @@ import { useContainer } from './useContainer';
 
 import type { Params, ElementPositionType } from './types';
 
-export const useElementPosition = ({
-  delay = 15,
-  mainContainerId,
-}: Params = {}): [(node: HTMLDivElement) => void, ElementPositionType] => {
+export const useElementPosition = ({ delay = 15 }: Params = {}): [
+  (node: HTMLDivElement) => void,
+  ElementPositionType
+] => {
   const [position, setPosition] = useState<ElementPositionType>({
     top: 0,
     left: 0,
@@ -19,8 +19,12 @@ export const useElementPosition = ({
     width: 0,
     height: 0,
 
-    marginRight: 0,
+    marginTop: 0,
     marginBottom: 0,
+
+    marginLeft: 0,
+    marginRight: 0,
+
     isVisible: false,
   });
   const { containerRef, container, ref } = useContainer();
@@ -56,6 +60,9 @@ export const useElementPosition = ({
           height: rect.height,
 
           isVisible: !isObstructed,
+
+          marginTop: rect.top,
+          marginLeft: rect.left,
           marginRight: window.innerWidth - rect.right,
           marginBottom: window.innerHeight - rect.bottom,
         });
@@ -67,9 +74,6 @@ export const useElementPosition = ({
       startTransition(performUpdate);
     }, delay);
 
-    const container = mainContainerId
-      ? document.getElementById(mainContainerId)
-      : null;
     const observer = new MutationObserver(updatePosition);
     observer.observe(document.body, {
       attributes: true,
@@ -77,20 +81,16 @@ export const useElementPosition = ({
       subtree: true,
     });
 
-    window.addEventListener('wheel', updatePosition);
     window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition);
-    container?.addEventListener('scroll', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
 
     return () => {
       observer.disconnect();
 
-      window.removeEventListener('wheel', updatePosition);
       window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition);
-      container?.removeEventListener('scroll', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
     };
-  }, [delay, mainContainerId, containerExists]);
+  }, [delay, containerExists]);
 
   return [ref, useDeepMemo(() => position, [position])];
 };

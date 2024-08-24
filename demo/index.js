@@ -8,7 +8,6 @@ const Dropdown = ({ style = {}, align }) => {
   const { popupRef, anchorRef, position } = usePopupPosition({
     align,
     delay: 5,
-    mainContainerId: 'container-scroll',
   });
 
   return (
