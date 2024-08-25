@@ -1,17 +1,10 @@
 import { useMemo } from 'react';
 
-import { getStrategies } from './strategies';
 import { useContainer } from './useContainer';
 import { useContainerSize } from './useContainerSize';
 import { useElementPosition } from './useElementPosition';
-import type { Params, ResultPositionType, AlignType } from './types';
-
-type PopupStyle = ResultPositionType & {
-  opacity?: 1 | 0;
-  position?: 'fixed';
-  display?: 'none' | undefined;
-  additionalStyle?: { minWidth: number };
-};
+import { calculatePopupStyle } from './calculatePopupStyle';
+import type { Params, PopupStyle, AlignType } from './types';
 
 type UsePopupPositionParams = Params & {
   align?: AlignType;
@@ -40,24 +33,14 @@ export const usePopupPosition = ({
   });
 
   const position = useMemo<PopupStyle | null>(() => {
-    if (!anchorPosition.isVisible) {
-      return { display: 'none' };
-    }
-    if (!popupRect?.height || !popupRect.width) {
-      return { opacity: 0 };
-    }
-
-    const [vertical, horizontal] = getStrategies(align);
-
-    return {
-      opacity: 1,
-      position: 'fixed',
-      ...vertical(anchorPosition, popupRect, flip, pessimistic),
-      ...horizontal(anchorPosition, popupRect, flip, pessimistic),
-
-      additionalStyle: { minWidth: anchorPosition.width },
-    };
-  }, [popupRect, anchorPosition, align, flip, pessimistic]);
+    return calculatePopupStyle(
+      align,
+      anchorPosition,
+      popupRect,
+      flip,
+      pessimistic
+    );
+  }, [align, anchorPosition, popupRect, flip, pessimistic]);
 
   return {
     popupRef,

@@ -25,3 +25,10 @@ export type ElementPositionType = SizeType &
 
 export type AlignStrategy = 'left' | 'right' | 'top' | 'bottom';
 export type AlignType = 'topleft' | 'bottomleft' | 'bottomright' | 'topright';
+
+export type PopupStyle = ResultPositionType & {
+  opacity?: 1 | 0;
+  position?: 'fixed';
+  display?: 'none' | undefined;
+  additionalStyle?: { minWidth: number };
+};

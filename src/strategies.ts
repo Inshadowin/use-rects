@@ -6,12 +6,17 @@ import type {
   ElementPositionType,
 } from './types';
 
-type StrategyType = (
+type StrategyResultType = {
+  position: ResultPositionType;
+  meta?: { pessimistic?: boolean; flip?: boolean };
+};
+
+export type StrategyType = (
   anchorPosition: ElementPositionType,
   size: SizeType,
   flip: boolean,
   pessimistic: boolean
-) => ResultPositionType;
+) => StrategyResultType;
 
 type CanApplyStrategyType = (
   anchorPosition: ElementPositionType,
@@ -23,7 +28,25 @@ type ApplyStrategyType = (
   size: SizeType
 ) => ResultPositionType;
 
-const pessimisticStrategyResult: ResultPositionType = { left: 0, top: 0 };
+type ExecutorType = (
+  strategy: AlignStrategy,
+  anchorPosition: ElementPositionType,
+  size: SizeType,
+  flip: boolean,
+  pessimistic: boolean
+) => StrategyResultType;
+
+type MergedExecutorType = (
+  strategies: StrategyType[],
+  ...params: Parameters<StrategyType>
+) => StrategyResultType;
+
+const pessimisticStrategy: { [x in AlignStrategy]: ResultPositionType } = {
+  left: { left: 0 },
+  right: { left: 0 },
+  top: { top: 0 },
+  bottom: { top: 0 },
+};
 const fallbackStrategy: { [x in AlignStrategy]: AlignStrategy } = {
   bottom: 'top',
   top: 'bottom',
@@ -43,30 +66,36 @@ const applyStrategy: { [x in AlignStrategy]: ApplyStrategyType } = {
   bottom: (anchor, _size) => ({ top: anchor.bottom }),
 };
 
-const executeStrategy = (
-  strategy: AlignStrategy,
-  anchorPosition: ElementPositionType,
-  size: SizeType,
-  flip: boolean,
-  pessimistic: boolean
-) => {
-  if (!flip || canApplyStrategy[strategy](anchorPosition, size)) {
-    return applyStrategy[strategy](anchorPosition, size);
-  }
-
-  const fallback = fallbackStrategy[strategy];
-  if (!pessimistic || canApplyStrategy[fallback](anchorPosition, size)) {
-    return applyStrategy[fallback](anchorPosition, size);
-  }
-
-  return pessimisticStrategyResult;
-};
-
-export const strategies: { [x in AlignStrategy]: StrategyType } = {
+const strategies: { [x in AlignStrategy]: StrategyType } = {
   top: (...params) => executeStrategy('top', ...params),
   left: (...params) => executeStrategy('left', ...params),
   right: (...params) => executeStrategy('right', ...params),
   bottom: (...params) => executeStrategy('bottom', ...params),
+};
+
+const executeStrategy: ExecutorType = (
+  strategy,
+  anchorPosition,
+  size,
+  flip,
+  pessimistic
+) => {
+  if (!flip || canApplyStrategy[strategy](anchorPosition, size)) {
+    return { position: applyStrategy[strategy](anchorPosition, size) };
+  }
+
+  const fallback = fallbackStrategy[strategy];
+  if (!pessimistic || canApplyStrategy[fallback](anchorPosition, size)) {
+    return {
+      meta: { flip: true },
+      position: applyStrategy[fallback](anchorPosition, size),
+    };
+  }
+
+  return {
+    meta: { pessimistic: true },
+    position: pessimisticStrategy[strategy],
+  };
 };
 
 export const getStrategies = (
@@ -84,4 +113,17 @@ export const getStrategies = (
     default:
       return [strategies.bottom, strategies.left];
   }
+};
+
+export const mergeStrategies: MergedExecutorType = (strategies, ...params) => {
+  const results = strategies.map(s => s(...params));
+
+  return {
+    position: results.reduce((acc, curr) => ({ ...acc, ...curr.position }), {}),
+
+    meta: {
+      flip: results.some(r => r.meta?.flip),
+      pessimistic: results.some(r => r.meta?.pessimistic),
+    },
+  };
 };
