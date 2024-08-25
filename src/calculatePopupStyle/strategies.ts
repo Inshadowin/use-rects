@@ -1,22 +1,12 @@
 import type {
   SizeType,
   AlignType,
+  StrategyType,
   AlignStrategy,
   ResultPositionType,
   ElementPositionType,
-} from './types';
-
-type StrategyResultType = {
-  position: ResultPositionType;
-  meta?: { pessimistic?: boolean; flip?: boolean };
-};
-
-export type StrategyType = (
-  anchorPosition: ElementPositionType,
-  size: SizeType,
-  flip: boolean,
-  pessimistic: boolean
-) => StrategyResultType;
+  StrategyResultType,
+} from '../types';
 
 type CanApplyStrategyType = (
   anchorPosition: ElementPositionType,
@@ -30,15 +20,11 @@ type ApplyStrategyType = (
 
 type ExecutorType = (
   strategy: AlignStrategy,
-  anchorPosition: ElementPositionType,
-  size: SizeType,
-  flip: boolean,
-  pessimistic: boolean
+  ...params: Parameters<StrategyType>
 ) => StrategyResultType;
 
-type MergedExecutorType = (
-  strategies: StrategyType[],
-  ...params: Parameters<StrategyType>
+type MergeResultsType = (
+  strategiesResults: StrategyResultType[]
 ) => StrategyResultType;
 
 const pessimisticStrategy: { [x in AlignStrategy]: ResultPositionType } = {
@@ -115,9 +101,10 @@ export const getStrategies = (
   }
 };
 
-export const mergeStrategies: MergedExecutorType = (strategies, ...params) => {
-  const results = strategies.map(s => s(...params));
-
+export const mergeStrategiesResults: MergeResultsType = (
+  results,
+  ...params
+) => {
   return {
     position: results.reduce((acc, curr) => ({ ...acc, ...curr.position }), {}),
 

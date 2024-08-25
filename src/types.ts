@@ -32,3 +32,15 @@ export type PopupStyle = ResultPositionType & {
   display?: 'none' | undefined;
   additionalStyle?: { minWidth: number };
 };
+
+export type StrategyResultType = {
+  position: ResultPositionType;
+  meta?: { pessimistic?: boolean; flip?: boolean };
+};
+
+export type StrategyType = (
+  anchorPosition: ElementPositionType,
+  size: SizeType,
+  flip: boolean,
+  pessimistic: boolean
+) => StrategyResultType;
