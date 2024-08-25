@@ -1,4 +1,5 @@
-import { getStrategies, mergeStrategiesResults } from './strategies';
+import { getStrategies } from './getStrategies';
+import { mergeStrategiesResults } from './mergeStrategiesResults';
 import type { AlignType, PopupStyle, StrategyType } from '../types';
 
 export const calculatePopupStyle = (

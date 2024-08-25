@@ -1,6 +1,5 @@
 import type {
   SizeType,
-  AlignType,
   StrategyType,
   AlignStrategy,
   ResultPositionType,
@@ -21,10 +20,6 @@ type ApplyStrategyType = (
 type ExecutorType = (
   strategy: AlignStrategy,
   ...params: Parameters<StrategyType>
-) => StrategyResultType;
-
-type MergeResultsType = (
-  strategiesResults: StrategyResultType[]
 ) => StrategyResultType;
 
 const pessimisticStrategy: { [x in AlignStrategy]: ResultPositionType } = {
@@ -52,14 +47,7 @@ const applyStrategy: { [x in AlignStrategy]: ApplyStrategyType } = {
   bottom: (anchor, _size) => ({ top: anchor.bottom }),
 };
 
-const strategies: { [x in AlignStrategy]: StrategyType } = {
-  top: (...params) => executeStrategy('top', ...params),
-  left: (...params) => executeStrategy('left', ...params),
-  right: (...params) => executeStrategy('right', ...params),
-  bottom: (...params) => executeStrategy('bottom', ...params),
-};
-
-const executeStrategy: ExecutorType = (
+export const executeStrategy: ExecutorType = (
   strategy,
   anchorPosition,
   size,
@@ -81,33 +69,5 @@ const executeStrategy: ExecutorType = (
   return {
     meta: { pessimistic: true },
     position: pessimisticStrategy[strategy],
-  };
-};
-
-export const getStrategies = (
-  align: AlignType
-): [StrategyType, StrategyType] => {
-  switch (align) {
-    case 'bottomleft':
-      return [strategies.bottom, strategies.left];
-    case 'bottomright':
-      return [strategies.bottom, strategies.right];
-    case 'topleft':
-      return [strategies.top, strategies.left];
-    case 'topright':
-      return [strategies.top, strategies.right];
-    default:
-      return [strategies.bottom, strategies.left];
-  }
-};
-
-export const mergeStrategiesResults: MergeResultsType = results => {
-  return {
-    position: results.reduce((acc, curr) => ({ ...acc, ...curr.position }), {}),
-
-    meta: {
-      flip: results.some(r => r.meta?.flip),
-      pessimistic: results.some(r => r.meta?.pessimistic),
-    },
   };
 };
