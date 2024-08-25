@@ -1,14 +1,5 @@
 import { executeStrategy } from './executeStrategy';
-import type {
-  AlignType,
-  StrategyType,
-  AlignStrategy,
-  StrategyResultType,
-} from '../types';
-
-type MergeResultsType = (
-  strategiesResults: StrategyResultType[]
-) => StrategyResultType;
+import type { AlignType, StrategyType, AlignStrategy } from '../types';
 
 const strategies: { [x in AlignStrategy]: StrategyType } = {
   top: (...params) => executeStrategy('top', ...params),
@@ -32,15 +23,4 @@ export const getStrategies = (
     default:
       return [strategies.bottom, strategies.left];
   }
-};
-
-export const mergeStrategiesResults: MergeResultsType = results => {
-  return {
-    position: results.reduce((acc, curr) => ({ ...acc, ...curr.position }), {}),
-
-    meta: {
-      flip: results.some(r => r.meta?.flip),
-      pessimistic: results.some(r => r.meta?.pessimistic),
-    },
-  };
 };
