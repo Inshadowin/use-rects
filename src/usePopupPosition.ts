@@ -4,7 +4,7 @@ import { useContainer } from './useContainer';
 import { useContainerSize } from './useContainerSize';
 import { useElementPosition } from './useElementPosition';
 import { calculatePopupStyle } from './calculatePopupStyle';
-import type { Params, PopupStyle, AlignType } from './types';
+import type { Params, UsePopupResult, AlignType } from './types';
 
 type UsePopupPositionParams = Params & {
   align?: AlignType;
@@ -32,7 +32,7 @@ export const usePopupPosition = ({
     containerRef: popupContainerRef,
   });
 
-  const position = useMemo<PopupStyle | null>(() => {
+  const popupPosition = useMemo<UsePopupResult>(() => {
     return calculatePopupStyle(
       align,
       anchorPosition,
@@ -46,7 +46,7 @@ export const usePopupPosition = ({
     popupRef,
     anchorRef,
 
-    position,
+    popupPosition,
     anchorPosition,
   };
 };

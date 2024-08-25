@@ -5,7 +5,7 @@ import { usePopupPosition } from '../src';
 
 const Dropdown = ({ style = {}, align }) => {
   const [open, setOpen] = useState(false);
-  const { popupRef, anchorRef, position } = usePopupPosition({
+  const { popupRef, anchorRef, popupPosition } = usePopupPosition({
     align,
     delay: 5,
   });
@@ -24,7 +24,7 @@ const Dropdown = ({ style = {}, align }) => {
           onClick={() => setOpen(false)}
           style={{
             position: 'fixed',
-            ...position,
+            ...popupPosition.style,
             width: 400,
             border: '1px solid red',
             padding: 20,

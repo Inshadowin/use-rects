@@ -30,7 +30,11 @@ export type PopupStyle = ResultPositionType & {
   opacity?: 1 | 0;
   position?: 'fixed';
   display?: 'none' | undefined;
-  additionalStyle?: { minWidth: number };
+};
+
+export type UsePopupResult = {
+  style: PopupStyle;
+  meta?: { pessimistic?: boolean; flip?: boolean; anchorWidth?: number };
 };
 
 export type StrategyResultType = {
