@@ -6,22 +6,36 @@ Package that allows to resolve DOM elements sizes and positions
 
 ## usePopupPosition
 
+- `flip` - used to allow popup to change position if there is no space for original align
+- `pessimistic` allows to show popup separated from anchor egdes, cause there is no proper fit
+- `align` - `topleft` | `bottomleft` | `bottomright` | `topright`
+
 returns:
 
 ```tsx
-type Position = {
-  top: number;
-  left: number;
+type PopupStyle = {
+  top?: number;
+  bottom?: number;
 
-  width: number;
-  height: number;
+  left?: number;
+  right?: number;
+
+  opacity?: 1 | 0;
+  position?: 'fixed';
+  display?: 'none' | undefined;
+};
+
+type UsePopupResult = {
+  style: PopupStyle;
+  meta?: { pessimistic?: boolean; flip?: boolean; anchorWidth?: number };
 };
 
 type ReturnType = {
   popupRef: (node: HTMLDivElement) => void;
   anchorRef: (node: HTMLDivElement) => void;
-  position: Position;
+
   anchorPosition: Position;
+  popupPosition: UsePopupResult;
 };
 ```
 
@@ -30,7 +44,7 @@ example:
 ```jsx
 const Dropdown = () => {
   const [open, setOpen] = useState(false);
-  const { popupRef, anchorRef, position } = usePopupPosition({
+  const { popupRef, anchorRef, popupPosition } = usePopupPosition({
     delay: 50,
   });
 
@@ -46,7 +60,7 @@ const Dropdown = () => {
         <div
           ref={popupRef}
           onClick={() => setOpen(false)}
-          style={{ position: 'fixed', ...position }}
+          style={{ position: 'fixed', ...popupPosition.style }}
         >
           DROPDOWN
         </div>
@@ -55,6 +69,8 @@ const Dropdown = () => {
   );
 };
 ```
+
+Use resulting style inside of container. If you need extra margins - don't apply them in combination with `flip`. Put another container inside and style it
 
 ## useContainerSize
 
