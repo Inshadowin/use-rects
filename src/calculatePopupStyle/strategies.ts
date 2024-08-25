@@ -101,10 +101,7 @@ export const getStrategies = (
   }
 };
 
-export const mergeStrategiesResults: MergeResultsType = (
-  results,
-  ...params
-) => {
+export const mergeStrategiesResults: MergeResultsType = results => {
   return {
     position: results.reduce((acc, curr) => ({ ...acc, ...curr.position }), {}),
 
