@@ -1,11 +1,11 @@
 import { getStrategies } from './getStrategies';
 import { mergeStrategiesResults } from './mergeStrategiesResults';
-import type { AlignType, UsePopupResult, StrategyType } from '../types';
+import type { AlignType, CalculatePopupResult, StrategyType } from '../types';
 
-export const calculatePopupStyle = (
+export const calculatePopupResult = (
   align: AlignType,
   ...params: Parameters<StrategyType>
-): UsePopupResult => {
+): CalculatePopupResult => {
   const results = getStrategies(align).map(s => s(...params));
   const { position, meta } = mergeStrategiesResults(results);
 

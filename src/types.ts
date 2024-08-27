@@ -32,7 +32,7 @@ export type PopupStyle = ResultPositionType & {
   display?: 'none' | undefined;
 };
 
-export type UsePopupResult = {
+export type CalculatePopupResult = {
   style: PopupStyle;
   meta?: { pessimistic?: boolean; flip?: boolean; anchorWidth?: number };
 };
