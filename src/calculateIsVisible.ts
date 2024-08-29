@@ -19,8 +19,8 @@ const isElementObstructed = (entry: HTMLDivElement, rect: DOMRect) => {
 
 const isElementOutOfBounds = (rect: DOMRect) => {
   return (
-    rect.top < 0 ||
-    rect.left < 0 ||
+    rect.bottom < 0 ||
+    rect.right < 0 ||
     rect.left > window.innerWidth ||
     rect.top > window.innerHeight
   );
