@@ -6,9 +6,21 @@ Package that allows to resolve DOM elements sizes and positions
 
 ## usePopupPosition
 
+Allows you to quickly build dropdowns
+
 - `flip` - used to allow popup to change position if there is no space for original align
 - `pessimistic` allows to show popup separated from anchor egdes, cause there is no proper fit
 - `align` - `topleft` | `bottomleft` | `bottomright` | `topright`
+- `trackVisible` - hides dropdown if anchor is hidden/obstructed on the page. Doesn't count anything with 'absolute', 'fixed', etc. as obstruction
+
+### Troublesooting
+
+You still have to build your own dropdown. So remember this:
+
+- add Z-index of you own if needed
+- `trackVisible` won't work if you have 'fixed' your navbars and other parts of the layout
+- dropdown must have 'height'. don't make it's content with 0 height and make some magic inside
+- use results of the hook for position only. don't style this popup. Add your div inside and style it. Insluding margin, borders, etc.
 
 returns:
 
