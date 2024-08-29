@@ -21,10 +21,10 @@ Just copy-paste and use this a base (with some tailwind)
 import React, { useState } from 'react';
 import { usePopupPosition } from 'use-rects';
 
-export const Dropdown = ({ className }) => {
+export const Dropdown = () => {
   const [open, setOpen] = useState(false);
 
-  const handleClose = () => setOpen(false);
+  // const handleClose = () => setOpen(false);
   const handleToggle = () => setOpen(o => !o);
 
   const { popupRef, anchorRef, popupPosition } = usePopupPosition({
@@ -34,8 +34,8 @@ export const Dropdown = ({ className }) => {
   });
 
   return (
-    <div ref={anchorRef} className={clsx('relative', className)}>
-      <div>Trigger</div>
+    <div ref={anchorRef} className="relative">
+      <div onClick={handleToggle}>Trigger</div>
 
       {open && (
         <div
