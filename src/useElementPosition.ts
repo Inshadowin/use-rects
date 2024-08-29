@@ -3,32 +3,8 @@ import { useState, useTransition, useLayoutEffect } from 'react';
 import { withDelay } from './withDelay';
 import { useDeepMemo } from './useDeepMemo';
 import { useContainer } from './useContainer';
-
+import { calculateIsVisible } from './calculateIsVisible';
 import type { Params, ElementPositionType } from './types';
-
-type PositionType = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
-const absolutesArray: PositionType[] = ['fixed', 'sticky', 'absolute'];
-
-const calcVisile = (entry: HTMLDivElement, rect: DOMRect) => {
-  const obstruction = document.elementFromPoint(
-    (rect.left + rect.right) / 2,
-    (rect.top + rect.bottom) / 2
-  );
-  const isObstructedByAbsolutes =
-    obstruction &&
-    absolutesArray.includes(
-      getComputedStyle(obstruction).position as PositionType
-    );
-
-  const isObstructed =
-    (obstruction && !entry.contains(obstruction) && !isObstructedByAbsolutes) ||
-    rect.top < 0 ||
-    rect.left < 0 ||
-    rect.right > window.innerWidth ||
-    rect.bottom > window.innerHeight;
-
-  return !isObstructed;
-};
 
 export const useElementPosition = ({
   delay = 15,
@@ -63,7 +39,7 @@ export const useElementPosition = ({
 
       if (entry) {
         const rect = entry.getBoundingClientRect();
-        const isVisible = trackVisible ? calcVisile(entry, rect) : true;
+        const isVisible = trackVisible ? calculateIsVisible(entry, rect) : true;
 
         setPosition({
           top: rect.top,

@@ -48,7 +48,7 @@ const Demo = () => {
       <div style={{ height: 200, border: '1px solid blue' }}>HEADER</div>
       <div
         id="container-scroll"
-        style={{ height: 'calc(100vh - 216px)', overflowY: 'auto' }}
+        style={{ height: 'calc(100vh - 200px)', overflowY: 'auto' }}
       >
         <div
           style={{
@@ -66,6 +66,10 @@ const Demo = () => {
           <Dropdown
             style={{ position: 'absolute', right: 0, top: 0 }}
             align="topleft"
+          />
+          <Dropdown
+            style={{ position: 'absolute', left: 0, bottom: 0 }}
+            align="bottomright"
           />
         </div>
       </div>
