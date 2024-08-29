@@ -16,6 +16,7 @@ export const usePopupPosition = ({
   delay,
   flip = true,
   pessimistic = false,
+  trackVisible = true,
   align = 'bottomleft',
   ...params
 }: UsePopupPositionParams = {}) => {
@@ -25,7 +26,11 @@ export const usePopupPosition = ({
     containerRef: popupContainerRef,
   } = useContainer();
 
-  const [anchorRef, anchorPosition] = useElementPosition({ delay, ...params });
+  const [anchorRef, anchorPosition] = useElementPosition({
+    delay,
+    trackVisible,
+    ...params,
+  });
   const popupRect = useContainerSize({
     delay: delay,
     enable: !!popup,

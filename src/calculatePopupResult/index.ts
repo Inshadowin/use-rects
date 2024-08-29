@@ -11,10 +11,10 @@ export const calculatePopupResult = (
 
   const [anchorPosition, popupRect] = params;
   if (!anchorPosition.isVisible && !meta.pessimistic) {
-    return { style: { display: 'none' } };
+    return { style: { display: 'none', position: 'fixed' } };
   }
-  if (!popupRect?.height || !popupRect.width) {
-    return { style: { opacity: 0 } };
+  if (popupRect.height === null || popupRect.width === null) {
+    return { style: { opacity: 0, position: 'fixed' } };
   }
 
   return {

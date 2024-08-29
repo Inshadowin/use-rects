@@ -1,8 +1,9 @@
 export type Params = {
   delay?: number;
+  trackVisible?: boolean;
 };
 
-export type SizeType = { height: number; width: number };
+export type SizeType = { height: number | null; width: number | null };
 export type ResultPositionType = {
   top?: number;
   bottom?: number;

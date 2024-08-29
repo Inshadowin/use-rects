@@ -6,10 +6,34 @@ import { useContainer } from './useContainer';
 
 import type { Params, ElementPositionType } from './types';
 
-export const useElementPosition = ({ delay = 15 }: Params = {}): [
-  (node: HTMLDivElement) => void,
-  ElementPositionType
-] => {
+type PositionType = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
+const absolutesArray: PositionType[] = ['fixed', 'sticky', 'absolute'];
+
+const calcVisile = (entry: HTMLDivElement, rect: DOMRect) => {
+  const obstruction = document.elementFromPoint(
+    (rect.left + rect.right) / 2,
+    (rect.top + rect.bottom) / 2
+  );
+  const isObstructedByAbsolutes =
+    obstruction &&
+    absolutesArray.includes(
+      getComputedStyle(obstruction).position as PositionType
+    );
+
+  const isObstructed =
+    (obstruction && !entry.contains(obstruction) && !isObstructedByAbsolutes) ||
+    rect.top < 0 ||
+    rect.left < 0 ||
+    rect.right > window.innerWidth ||
+    rect.bottom > window.innerHeight;
+
+  return !isObstructed;
+};
+
+export const useElementPosition = ({
+  delay = 15,
+  trackVisible = false,
+}: Params = {}): [(node: HTMLDivElement) => void, ElementPositionType] => {
   const [position, setPosition] = useState<ElementPositionType>({
     top: 0,
     left: 0,
@@ -39,16 +63,7 @@ export const useElementPosition = ({ delay = 15 }: Params = {}): [
 
       if (entry) {
         const rect = entry.getBoundingClientRect();
-        const obstruction = document.elementFromPoint(
-          (rect.left + rect.right) / 2,
-          (rect.top + rect.bottom) / 2
-        );
-        const isObstructed =
-          (obstruction && !entry.contains(obstruction)) ||
-          rect.top < 0 ||
-          rect.left < 0 ||
-          rect.right > window.innerWidth ||
-          rect.bottom > window.innerHeight;
+        const isVisible = trackVisible ? calcVisile(entry, rect) : true;
 
         setPosition({
           top: rect.top,
@@ -59,7 +74,7 @@ export const useElementPosition = ({ delay = 15 }: Params = {}): [
           width: rect.width,
           height: rect.height,
 
-          isVisible: !isObstructed,
+          isVisible: isVisible,
 
           marginTop: rect.top,
           marginLeft: rect.left,
@@ -90,7 +105,7 @@ export const useElementPosition = ({ delay = 15 }: Params = {}): [
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition, true);
     };
-  }, [delay, containerExists]);
+  }, [delay, trackVisible, containerExists]);
 
   return [ref, useDeepMemo(() => position, [position])];
 };
