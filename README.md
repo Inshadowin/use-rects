@@ -13,6 +13,47 @@ Allows you to quickly build dropdowns
 - `align` - `topleft` | `bottomleft` | `bottomright` | `topright`
 - `trackVisible` - hides dropdown if anchor is hidden/obstructed on the page. Doesn't count anything with 'absolute', 'fixed', etc. as obstruction
 
+### Example of the component
+
+Just copy-paste and use this a base (with some tailwind)
+
+```jsx
+import React, { useState } from 'react';
+import { usePopupPosition } from 'use-rects';
+
+export const Dropdown = ({ className }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => setOpen(false);
+  const handleToggle = () => setOpen(o => !o);
+
+  const { popupRef, anchorRef, popupPosition } = usePopupPosition({
+    delay: 15,
+    flip: true,
+    align: 'bottomleft',
+  });
+
+  return (
+    <div ref={anchorRef} className={clsx('relative', className)}>
+      <div>Trigger</div>
+
+      {open && (
+        <div
+          ref={popupRef}
+          style={{
+            ...popupPosition.style,
+            width: popupPosition.meta?.anchorWidth,
+          }}
+          className="fixed z-popper py-2"
+        >
+          <div className="shadow-sm rounded">Dropdown</div>
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
 ### Troublesooting
 
 You still have to build your own dropdown. So remember this:
