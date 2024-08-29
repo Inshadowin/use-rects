@@ -18,21 +18,14 @@ const isElementObstructed = (entry: HTMLDivElement, rect: DOMRect) => {
 };
 
 const isElementOutOfBounds = (rect: DOMRect) => {
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-
-  // Check if the element is completely out of bounds
-  const outOfBoundsHorizontally = rect.right < 0 || rect.left > viewportWidth;
-  const outOfBoundsVertically = rect.bottom < 0 || rect.top > viewportHeight;
-
-  return outOfBoundsHorizontally || outOfBoundsVertically;
+  return (
+    rect.top < 0 ||
+    rect.left < 0 ||
+    rect.left > window.innerWidth ||
+    rect.top > window.innerHeight
+  );
 };
 
 export const calculateIsVisible = (entry: HTMLDivElement, rect: DOMRect) => {
-  rect.top < 0 ||
-    rect.left < 0 ||
-    rect.right > window.innerWidth ||
-    rect.bottom > window.innerHeight;
-
   return !isElementObstructed(entry, rect) && !isElementOutOfBounds(rect);
 };

@@ -40,6 +40,7 @@ export const useElementPosition = ({
       if (entry) {
         const rect = entry.getBoundingClientRect();
         const isVisible = trackVisible ? calculateIsVisible(entry, rect) : true;
+        console.log('isVisible', isVisible);
 
         setPosition({
           top: rect.top,
