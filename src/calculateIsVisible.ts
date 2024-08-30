@@ -2,9 +2,12 @@ type PositionType = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
 const absolutesArray: PositionType[] = ['fixed', 'sticky', 'absolute'];
 
 const isElementObstructed = (entry: HTMLDivElement, rect: DOMRect) => {
+  const obstructionX = (rect.left + rect.right) / 2;
+  const obstructionY = (rect.top + rect.bottom) / 2;
+
   const obstruction = document.elementFromPoint(
-    (rect.left + rect.right) / 2,
-    (rect.top + rect.bottom) / 2
+    obstructionX > 0 ? obstructionX : 0,
+    obstructionY > 0 ? obstructionY : 0
   );
 
   if (!obstruction) return false;

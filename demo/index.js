@@ -8,6 +8,7 @@ const Dropdown = ({ style = {}, align }) => {
   const { popupRef, anchorRef, popupPosition } = usePopupPosition({
     align,
     delay: 5,
+    trackVisible: true,
   });
 
   return (

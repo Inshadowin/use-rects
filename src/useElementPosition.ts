@@ -1,32 +1,35 @@
-import { useState, useTransition, useLayoutEffect } from 'react';
+import { useTransition, useLayoutEffect } from 'react';
+import { useCreateSignal } from 'use-create-signal';
 
 import { withDelay } from './withDelay';
 import { useDeepMemo } from './useDeepMemo';
 import { useContainer } from './useContainer';
 import { calculateIsVisible } from './calculateIsVisible';
 import type { Params, ElementPositionType } from './types';
+import isEqual from 'lodash.isequal';
 
 export const useElementPosition = ({
   delay = 15,
   trackVisible = false,
 }: Params = {}): [(node: HTMLDivElement) => void, ElementPositionType] => {
-  const [position, setPosition] = useState<ElementPositionType>({
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+  const [getPosition, setPosition, position] =
+    useCreateSignal<ElementPositionType>({
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
 
-    width: 0,
-    height: 0,
+      width: 0,
+      height: 0,
 
-    marginTop: 0,
-    marginBottom: 0,
+      marginTop: 0,
+      marginBottom: 0,
 
-    marginLeft: 0,
-    marginRight: 0,
+      marginLeft: 0,
+      marginRight: 0,
 
-    isVisible: false,
-  });
+      isVisible: false,
+    });
   const { containerRef, container, ref } = useContainer();
   const [, startTransition] = useTransition();
 
@@ -41,7 +44,7 @@ export const useElementPosition = ({
         const rect = entry.getBoundingClientRect();
         const isVisible = trackVisible ? calculateIsVisible(entry, rect) : true;
 
-        setPosition({
+        const newPosition = {
           top: rect.top,
           left: rect.left,
           right: rect.right,
@@ -56,7 +59,11 @@ export const useElementPosition = ({
           marginLeft: rect.left,
           marginRight: window.innerWidth - rect.right,
           marginBottom: window.innerHeight - rect.bottom,
-        });
+        };
+
+        if (isEqual(newPosition, getPosition())) return;
+
+        setPosition(newPosition);
       }
     };
     performUpdate();

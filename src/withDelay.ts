@@ -1,4 +1,4 @@
-import { throttle } from 'lodash';
+import throttle from 'lodash.throttle';
 
 export const withDelay = (func: (...args: any) => any, delay: number) => {
   return throttle(func, delay, {

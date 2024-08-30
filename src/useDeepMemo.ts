@@ -1,5 +1,5 @@
 import React from 'react';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 
 const useDeepCompareMemoize = (value: any[]) => {
   const ref = React.useRef<any[]>([]);

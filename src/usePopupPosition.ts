@@ -16,7 +16,7 @@ export const usePopupPosition = ({
   delay,
   flip = true,
   pessimistic = false,
-  trackVisible = true,
+  trackVisible = false,
   align = 'bottomleft',
   ...params
 }: UsePopupPositionParams = {}) => {
