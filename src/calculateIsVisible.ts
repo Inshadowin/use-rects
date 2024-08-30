@@ -6,15 +6,15 @@ const isElementObstructed = (entry: HTMLDivElement, rect: DOMRect) => {
     (rect.left + rect.right) / 2,
     (rect.top + rect.bottom) / 2
   );
-  const isObstructedByAbsolutes =
-    obstruction &&
-    absolutesArray.includes(
-      getComputedStyle(obstruction).position as PositionType
-    );
 
-  return (
-    obstruction && !entry.contains(obstruction) && !isObstructedByAbsolutes
+  if (!obstruction) return false;
+  if (!entry.contains(obstruction)) return false;
+
+  const isObstructedByAbsolutes = absolutesArray.includes(
+    getComputedStyle(obstruction).position as PositionType
   );
+
+  return !isObstructedByAbsolutes;
 };
 
 const isElementOutOfBounds = (rect: DOMRect) => {
