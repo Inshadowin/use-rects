@@ -8,7 +8,7 @@ const isElementObstructed = (entry: HTMLDivElement, rect: DOMRect) => {
   );
 
   if (!obstruction) return false;
-  if (!entry.contains(obstruction)) return false;
+  if (entry.contains(obstruction)) return false;
 
   const isObstructedByAbsolutes = absolutesArray.includes(
     getComputedStyle(obstruction).position as PositionType
