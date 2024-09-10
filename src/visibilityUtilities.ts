@@ -20,7 +20,7 @@ const isElementObstructed = (entry: HTMLDivElement, rect: DOMRect) => {
   return !isObstructedByAbsolutes;
 };
 
-const isElementOutOfBounds = (rect: DOMRect) => {
+export const calculateIsOutOfBounds = (rect: DOMRect) => {
   return (
     rect.bottom < 0 ||
     rect.right < 0 ||
@@ -30,5 +30,5 @@ const isElementOutOfBounds = (rect: DOMRect) => {
 };
 
 export const calculateIsVisible = (entry: HTMLDivElement, rect: DOMRect) => {
-  return !isElementObstructed(entry, rect) && !isElementOutOfBounds(rect);
+  return !isElementObstructed(entry, rect);
 };

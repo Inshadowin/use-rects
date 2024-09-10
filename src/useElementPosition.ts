@@ -1,12 +1,13 @@
 import { useTransition, useLayoutEffect } from 'react';
 import { useCreateSignal } from 'use-create-signal';
+import isEqual from 'lodash.isequal';
 
 import { withDelay } from './withDelay';
 import { useDeepMemo } from './useDeepMemo';
 import { useContainer } from './useContainer';
-import { calculateIsVisible } from './calculateIsVisible';
+import { calculateIsVisible } from './visibilityUtilities';
+import { calculateIsOutOfBounds } from './visibilityUtilities';
 import type { Params, ElementPositionType } from './types';
-import isEqual from 'lodash.isequal';
 
 export const useElementPosition = ({
   delay = 15,
@@ -29,6 +30,7 @@ export const useElementPosition = ({
       marginRight: 0,
 
       isVisible: false,
+      isOutOfBounds: false,
     });
   const { containerRef, container, ref } = useContainer();
   const [, startTransition] = useTransition();
@@ -42,9 +44,10 @@ export const useElementPosition = ({
 
       if (entry) {
         const rect = entry.getBoundingClientRect();
+        const isOutOfBounds = calculateIsOutOfBounds(rect);
         const isVisible = trackVisible ? calculateIsVisible(entry, rect) : true;
 
-        const newPosition = {
+        const newPosition: ElementPositionType = {
           top: rect.top,
           left: rect.left,
           right: rect.right,
@@ -54,6 +57,7 @@ export const useElementPosition = ({
           height: rect.height,
 
           isVisible: isVisible,
+          isOutOfBounds: isOutOfBounds,
 
           marginTop: rect.top,
           marginLeft: rect.left,

@@ -18,11 +18,11 @@ export type FixedPositionType = {
   marginLeft: number;
   marginRight: number;
 };
+export type VisibilityType = { isVisible: boolean; isOutOfBounds: boolean };
 export type ElementPositionType = SizeType &
   Required<ResultPositionType> &
-  FixedPositionType & {
-    isVisible: boolean;
-  };
+  FixedPositionType &
+  VisibilityType;
 
 export type AlignStrategy = 'left' | 'right' | 'top' | 'bottom';
 export type AlignType = 'topleft' | 'bottomleft' | 'bottomright' | 'topright';

@@ -10,7 +10,8 @@ export const calculatePopupResult = (
   const { position, meta } = mergeStrategiesResults(results);
 
   const [anchorPosition, popupRect] = params;
-  if (!anchorPosition.isVisible && !meta.pessimistic) {
+  const { isVisible, isOutOfBounds } = anchorPosition;
+  if ((!isVisible || !isOutOfBounds) && !meta.pessimistic) {
     return { style: { display: 'none', position: 'fixed' } };
   }
   if (popupRect.height === null || popupRect.width === null) {
