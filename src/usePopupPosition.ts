@@ -6,7 +6,7 @@ import { useElementPosition } from './useElementPosition';
 import { calculatePopupResult } from './calculatePopupResult';
 import type { Params, CalculatePopupResult, AlignType } from './types';
 
-type UsePopupPositionParams = Params & {
+export type UsePopupPositionParams = Params & {
   align?: AlignType;
   flip?: boolean;
   pessimistic?: boolean;
@@ -15,6 +15,7 @@ type UsePopupPositionParams = Params & {
 export const usePopupPosition = ({
   delay,
   flip = true,
+  enable = true,
   pessimistic = false,
   trackVisible = false,
   align = 'bottomleft',
@@ -28,12 +29,13 @@ export const usePopupPosition = ({
 
   const [anchorRef, anchorPosition] = useElementPosition({
     delay,
+    enable,
     trackVisible,
     ...params,
   });
   const popupRect = useContainerSize({
     delay: delay,
-    enable: !!popup,
+    enable: !!popup && enable,
     containerRef: popupContainerRef,
   });
 

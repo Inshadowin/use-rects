@@ -1,5 +1,6 @@
 export type Params = {
   delay?: number;
+  enable?: boolean;
   trackVisible?: boolean;
 };
 

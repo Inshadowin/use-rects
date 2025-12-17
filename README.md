@@ -8,6 +8,7 @@ Package that allows to resolve DOM elements sizes and positions
 
 Allows you to quickly build dropdowns
 
+- `enable` - turns on/off calculation of postions. Turn on only, when you need it
 - `flip` - used to allow popup to change position if there is no space for original align
 - `pessimistic` allows to show popup separated from anchor egdes, cause there is no proper fit
 - `align` - `topleft` | `bottomleft` | `bottomright` | `topright`
@@ -30,6 +31,7 @@ export const Dropdown = () => {
   const { popupRef, anchorRef, popupPosition } = usePopupPosition({
     delay: 15,
     flip: true,
+    enable: open,
     align: 'bottomleft',
   });
 
@@ -105,6 +107,7 @@ const Dropdown = () => {
   const [open, setOpen] = useState(false);
   const { popupRef, anchorRef, popupPosition } = usePopupPosition({
     delay: 50,
+    enable: open,
   });
 
   return (

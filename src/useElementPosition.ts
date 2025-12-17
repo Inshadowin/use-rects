@@ -11,6 +11,7 @@ import type { Params, ElementPositionType } from './types';
 
 export const useElementPosition = ({
   delay = 15,
+  enable = true,
   trackVisible = false,
 }: Params = {}): [(node: HTMLDivElement) => void, ElementPositionType] => {
   const [getPosition, setPosition, position] =
@@ -37,7 +38,7 @@ export const useElementPosition = ({
 
   const containerExists = !!container;
   useLayoutEffect(() => {
-    if (!containerExists) return;
+    if (!containerExists || !enable) return;
 
     const performUpdate = () => {
       const entry = containerRef.current;
@@ -92,7 +93,7 @@ export const useElementPosition = ({
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition, true);
     };
-  }, [delay, trackVisible, containerExists]);
+  }, [delay, trackVisible, containerExists, enable]);
 
   return [ref, useDeepMemo(() => position, [position])];
 };
