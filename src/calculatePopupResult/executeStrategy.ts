@@ -55,13 +55,16 @@ export const executeStrategy: ExecutorType = (
   pessimistic
 ) => {
   if (!flip || canApplyStrategy[strategy](anchorPosition, size)) {
-    return { position: applyStrategy[strategy](anchorPosition, size) };
+    return {
+      meta: { flip: false, strategy: strategy },
+      position: applyStrategy[strategy](anchorPosition, size),
+    };
   }
 
   const fallback = fallbackStrategy[strategy];
   if (!pessimistic || canApplyStrategy[fallback](anchorPosition, size)) {
     return {
-      meta: { flip: true },
+      meta: { flip: true, strategy: fallback },
       position: applyStrategy[fallback](anchorPosition, size),
     };
   }

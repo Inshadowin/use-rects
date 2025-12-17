@@ -24,3 +24,12 @@ export const getStrategies = (
       return [strategies.bottom, strategies.left];
   }
 };
+
+export const getAlignFromStrategies = (
+  strategies: Array<AlignStrategy>
+): AlignType => {
+  const vertical = strategies.includes('top') ? 'top' : 'bottom';
+  const horizontal = strategies.includes('right') ? 'right' : 'left';
+
+  return `${vertical}${horizontal}`;
+};

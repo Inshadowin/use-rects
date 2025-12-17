@@ -40,7 +40,17 @@ export type CalculatePopupResult = {
 
 export type StrategyResultType = {
   position: ResultPositionType;
-  meta?: { pessimistic?: boolean; flip?: boolean };
+  meta?: { pessimistic?: boolean; flip?: boolean; strategy?: AlignStrategy };
+};
+
+export type MergedStrategyResultType = {
+  position: ResultPositionType;
+  meta?: {
+    pessimistic?: boolean;
+    flip?: boolean;
+    align?: AlignType;
+    strategies?: AlignStrategy[];
+  };
 };
 
 export type StrategyType = (

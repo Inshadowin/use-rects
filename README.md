@@ -80,7 +80,13 @@ type PopupStyle = {
 
 type UsePopupResult = {
   style: PopupStyle;
-  meta?: { pessimistic?: boolean; flip?: boolean; anchorWidth?: number };
+  meta?: {
+    pessimistic?: boolean;
+    flip?: boolean;
+    anchorWidth?: number;
+    strategies?: Array<'left' | 'right' | 'top' | 'bottom'>;
+    align?: `topleft` | `bottomleft` | `bottomright` | `topright`;
+  };
 };
 
 type ReturnType = {

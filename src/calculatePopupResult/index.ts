@@ -1,4 +1,4 @@
-import { getStrategies } from './getStrategies';
+import { getStrategies } from './strategies';
 import { mergeStrategiesResults } from './mergeStrategiesResults';
 import type { AlignType, CalculatePopupResult, StrategyType } from '../types';
 
@@ -11,7 +11,7 @@ export const calculatePopupResult = (
 
   const [anchorPosition, popupRect] = params;
   const { isVisible, isOutOfBounds } = anchorPosition;
-  if ((!isVisible || !isOutOfBounds) && !meta.pessimistic) {
+  if ((!isVisible || isOutOfBounds) && !meta.pessimistic) {
     return { style: { display: 'none', position: 'fixed' } };
   }
   if (popupRect.height === null || popupRect.width === null) {
@@ -26,8 +26,7 @@ export const calculatePopupResult = (
     },
 
     meta: {
-      flip: meta.flip,
-      pessimistic: meta.pessimistic,
+      ...meta,
       anchorWidth: anchorPosition.width,
     },
   };

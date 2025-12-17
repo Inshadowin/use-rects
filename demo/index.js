@@ -16,8 +16,8 @@ const Dropdown = ({ style = {}, align }) => {
       <input
         readOnly
         ref={anchorRef}
-        onClick={() => setOpen(true)}
         value="test me"
+        onClick={() => setOpen(true)}
       />
       {!!open && (
         <div
@@ -27,11 +27,14 @@ const Dropdown = ({ style = {}, align }) => {
             position: 'fixed',
             ...popupPosition.style,
             width: 400,
+            height: 200,
             border: '1px solid red',
             padding: 20,
           }}
         >
           DROPDOWN
+          <br />
+          {JSON.stringify(popupPosition, null, 2)}
         </div>
       )}
     </div>
