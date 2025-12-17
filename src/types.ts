@@ -2,6 +2,7 @@ export type Params = {
   delay?: number;
   enable?: boolean;
   trackVisible?: boolean;
+  trackMutations?: boolean;
 };
 
 export type SizeType = { height: number | null; width: number | null };

@@ -18,6 +18,7 @@ export const usePopupPosition = ({
   enable = true,
   pessimistic = false,
   trackVisible = false,
+  trackMutations = true,
   align = 'bottomleft',
   ...params
 }: UsePopupPositionParams = {}) => {
@@ -31,6 +32,7 @@ export const usePopupPosition = ({
     delay,
     enable,
     trackVisible,
+    trackMutations,
     ...params,
   });
   const popupRect = useContainerSize({

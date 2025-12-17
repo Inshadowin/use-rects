@@ -13,6 +13,7 @@ export const useElementPosition = ({
   delay = 15,
   enable = true,
   trackVisible = false,
+  trackMutations = true,
 }: Params = {}): [(node: HTMLDivElement) => void, ElementPositionType] => {
   const [getPosition, setPosition, position] =
     useCreateSignal<ElementPositionType>({
@@ -77,7 +78,9 @@ export const useElementPosition = ({
       startTransition(performUpdate);
     }, delay);
 
-    const observer = new MutationObserver(updatePosition);
+    const observer = trackMutations
+      ? new MutationObserver(updatePosition)
+      : { observe: () => {}, disconnect: () => {} };
     observer.observe(document.body, {
       attributes: true,
       childList: true,
@@ -93,7 +96,7 @@ export const useElementPosition = ({
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition, true);
     };
-  }, [delay, trackVisible, containerExists, enable]);
+  }, [delay, trackVisible, trackMutations, containerExists, enable]);
 
   return [ref, useDeepMemo(() => position, [position])];
 };

@@ -5,12 +5,13 @@ import { usePopupPosition } from '../src';
 
 const Dropdown = ({ style = {}, align }) => {
   const [open, setOpen] = useState(false);
-  const { popupRef, anchorRef, popupPosition } = usePopupPosition({
-    align,
-    delay: 5,
-    enable: open,
-    trackVisible: true,
-  });
+  const { popupRef, anchorRef, anchorPosition, popupPosition } =
+    usePopupPosition({
+      align,
+      delay: 5,
+      enable: open,
+      trackVisible: true,
+    });
 
   return (
     <div style={{ position: 'relative', ...style }}>
