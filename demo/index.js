@@ -32,6 +32,7 @@ const Dropdown = ({ style = {}, align }) => {
             height: 200,
             border: '1px solid red',
             padding: 20,
+            background: '#FFFFFF80',
           }}
         >
           DROPDOWN
